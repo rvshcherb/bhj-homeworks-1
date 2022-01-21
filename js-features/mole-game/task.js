@@ -41,3 +41,4 @@ const killMoleLogic = function() {
 
 killMoleLogic();
 
+console.log(new Date(0));
