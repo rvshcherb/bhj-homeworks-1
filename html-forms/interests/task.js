@@ -1,15 +1,13 @@
 (function () {
   const interests = document.querySelectorAll('.interest');
 
-  const checkTree = function (interest, evt) {
-
+  const checkChildren = function (evt) {
     const childrenOfSelected = evt.target.closest('.interest').querySelectorAll('.interest__check');
     childrenOfSelected.forEach(checkbox => checkbox.checked = evt.target.checked);
+  };
 
-
-
-
-    if(interest.parentElement.closest('.interest').querySelector('.interest__check')) {
+  const checkParents = function (interest) {
+    if (interest.parentElement.closest('.interest')) {
 
       const interestParent = interest.parentElement.closest('.interest').querySelector('.interest__check');
       const interestSiblings = interest.closest('.interests').querySelectorAll('.interest__check');
@@ -28,10 +26,13 @@
           interestParent.indeterminate = true;
           break;
       }
+      checkParents(interest.parentElement.closest('.interest'));
     }
   };
 
+  interests.forEach(interest =>
+    interest.querySelector('.interest__check').addEventListener('click', (evt) => checkChildren(evt)));
 
   interests.forEach(interest =>
-    interest.querySelector('.interest__check').addEventListener('click', (evt) => checkTree(interest, evt)));
+    interest.querySelector('.interest__check').addEventListener('click', () => checkParents(interest)));
 })();
