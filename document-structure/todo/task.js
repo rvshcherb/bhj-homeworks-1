@@ -5,14 +5,16 @@
 
   form.addEventListener('submit', function(evt) {
     evt.preventDefault();
-    taskList.insertAdjacentHTML('afterBegin', 
-    `<div class="task">
-      <div class="task__title">
-        ${taskInput.value}
-      </div>
-      <a href="#" class="task__remove">&times;</a>
-    </div>` );
-    form.reset();
+    if(taskInput.value) { 
+      taskList.insertAdjacentHTML('afterBegin', 
+      `<div class="task">
+        <div class="task__title">
+          ${taskInput.value}
+        </div>
+        <a href="#" class="task__remove">&times;</a>
+      </div>` );
+      form.reset();
+    }
   });
 
   taskList.addEventListener('click', function(evt) {
@@ -20,5 +22,4 @@
       evt.target.closest('.task').remove();
     }
   });
-
 })();
