@@ -19,9 +19,17 @@
         `<div class="cart__product" data-id=${product.dataset.id}>
           <img class="cart__product-image" src=${product.querySelector('.product__image').src}>
           <div class="cart__product-count">${product.querySelector('.product__quantity-value').innerText}</div>
+          <a href="#" style="display: block" class="cart__product-remove">Удалить</a>
         </div>`);
       }
     }));
+
+    cart.addEventListener('click', function(evt) {
+      if(evt.target.classList.contains('cart__product-remove')) {
+        evt.preventDefault();
+        evt.target.closest('.cart__product').remove();
+      }
+    });
 
 
     quantityControls.forEach(quantityControl => quantityControl.addEventListener('click', function(evt) {
