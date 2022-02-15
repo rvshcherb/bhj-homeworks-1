@@ -1,57 +1,61 @@
-const authorization = function () {
-  const userID = document.getElementById('user_id');
-  const signinBlock = document.getElementById('signin');
-  const welcomeBlock = document.getElementById('welcome');
-  const form = document.getElementById('signin__form');
-  const submitBtn = document.getElementById('signin__btn');
-  const logoutBtn = document.getElementById('logout');
+class Authorization {
+  constructor() {
+    this.userID = document.getElementById('user_id');
+    this.signinBlock = document.getElementById('signin');
+    this.welcomeBlock = document.getElementById('welcome');
+    this.form = document.getElementById('signin__form');
+    this.submitBtn = document.getElementById('signin__btn');
+    this.logoutBtn = document.getElementById('logout');
+    this.id = localStorage.id;
+  }
 
-  let id = localStorage.id;
-
-  const logout = function () {
-    if (logoutBtn) {
-      logoutBtn.addEventListener('click', function () {
+  logout() {
+    if (this.logoutBtn) {
+      this.logoutBtn.addEventListener('click', () => {
         localStorage.clear();
-        signinBlock.classList.add('signin_active');
-        welcomeBlock.classList.remove('welcome_active');
+        this.signinBlock.classList.add('signin_active');
+        this.welcomeBlock.classList.remove('welcome_active');
         location.reload();
       });
     }
   }
 
-  const welcomeUser = function () {
-    userID.outerText = id;
-    signinBlock.classList.remove('signin_active');
-    welcomeBlock.classList.add('welcome_active');
-    logout();
+  welcomeUser() {
+    this.userID.outerText = this.id;
+    this.signinBlock.classList.remove('signin_active');
+    this.welcomeBlock.classList.add('welcome_active');
+    this.logout();
   };
 
-  const authorize = function () {
-    xhr = new XMLHttpRequest();
-    submitBtn.addEventListener('click', function (evt) {
+  authorize() {
+    const xhr = new XMLHttpRequest();
+    this.submitBtn.addEventListener('click', function (evt) {
       evt.preventDefault();
       xhr.open('POST', 'https://netology-slow-rest.herokuapp.com/auth.php');
-      const formData = new FormData(form);
+      const formData = new FormData(this.form);
       xhr.send(formData);
-      form.reset();
+      this.form.reset();
     });
 
-    xhr.addEventListener('load', function () {
+    xhr.addEventListener('load', () => {
       if (JSON.parse(xhr.response).success) {
-        id = JSON.parse(xhr.response).user_id;
-        localStorage.setItem('id', id)
-        welcomeUser();
+        this.id = JSON.parse(xhr.response).user_id;
+        localStorage.setItem('id', this.id)
+        this.welcomeUser();
       } else {
         alert('Не верный логин/пароль');
       }
     })
   };
+};
 
+const launchAuth = function() {
+  const authorization = new Authorization();
   if (localStorage.id) {
-    welcomeUser();
+    authorization.welcomeUser();
   } else {
-    authorize();
+    authorization.authorize();    
   }
 };
 
-window.addEventListener('DOMContentLoaded', authorization);
+window.addEventListener('DOMContentLoaded', launchAuth);
